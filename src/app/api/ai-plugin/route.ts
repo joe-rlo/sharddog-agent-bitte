@@ -62,7 +62,8 @@ export async function GET() {
                 - /api/tools/create-channel: To create a new treat channel
                 - /api/tools/mint-treat: To mint treats to wallets`,
                 tools: [{ type: "generate-transaction" }],
-                version: "1.0.0"
+                version: "1.0.0",
+                "image": `${config.url}/sharddog.png`,
             },
         },
         paths: {
