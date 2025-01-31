@@ -18,7 +18,7 @@ export async function GET() {
         },
         servers: [
             {
-                url: "https://sharddog-agent-bitte.vercel.app",
+                url: config.url,
             },
         ],
         "x-mb": {
