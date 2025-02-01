@@ -31,8 +31,8 @@ export async function GET() {
                 
                 Important Channel Creation Workflow:
                 1. When you create a channel, you'll receive a channelId and apiKey
-                2. Save these credentials - you'll need them to mint treats later
-                3. The channelId is required for all minting operations
+                2. You MUST remember and store these credentials
+                3. When minting treats later, you MUST provide both the channelId AND apiKey
                 
                 When creating a channel, ensure all parameters are properly formatted:
                 1. Title: Simple text string (avoid special characters if possible)
@@ -42,15 +42,18 @@ export async function GET() {
                 5. Wallet (optional): NEAR account name (will add .near if missing)
                 
                 When minting treats:
-                1. You must use the channelId from channel creation
+                1. You MUST provide both the channelId AND apiKey from channel creation
                 2. Provide either receiverId or wallet (will be formatted with .near if needed)
-                3. The system will use the stored API key for that channel
                 
                 Example workflow:
                 1. Create channel:
                    Response: { "channelId": "abc123", "apiKey": "xyz789" }
-                2. Mint treat using that channelId:
-                   Request: { "channelId": "abc123", "receiverId": "user.near" }
+                2. Mint treat using those credentials:
+                   Request: { 
+                     "channelId": "abc123",
+                     "apiKey": "xyz789",
+                     "receiverId": "user.near"
+                   }
                 
                 Always validate:
                 - All required fields are present
@@ -188,11 +191,15 @@ export async function GET() {
                             "application/json": {
                                 schema: {
                                     type: "object",
-                                    required: ["channelId"],
+                                    required: ["channelId", "apiKey"],
                                     properties: {
                                         channelId: {
                                             type: "string",
-                                            description: "Channel ID received from channel creation"
+                                            description: "Channel ID from channel creation"
+                                        },
+                                        apiKey: {
+                                            type: "string",
+                                            description: "API Key received during channel creation"
                                         },
                                         receiverId: {
                                             type: "string",
@@ -200,7 +207,7 @@ export async function GET() {
                                         },
                                         wallet: {
                                             type: "string",
-                                            description: "Alternative to receiverId - wallet address to receive the treat"
+                                            description: "Alternative to receiverId - wallet address"
                                         }
                                     }
                                 },
@@ -208,13 +215,8 @@ export async function GET() {
                                     "using-receiver-id": {
                                         value: {
                                             channelId: "abc123",
+                                            apiKey: "xyz789",
                                             receiverId: "user.near"
-                                        }
-                                    },
-                                    "using-wallet": {
-                                        value: {
-                                            channelId: "abc123",
-                                            wallet: "user.near"
                                         }
                                     }
                                 }

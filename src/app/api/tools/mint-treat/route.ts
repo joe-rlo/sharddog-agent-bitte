@@ -6,7 +6,7 @@ declare global {
 
 export async function POST(req: Request) {
     try {
-        const { channelId, receiverId, wallet } = await req.json();
+        const { channelId, receiverId, wallet, apiKey } = await req.json();
         
         // Use receiverId if present, otherwise use wallet
         const targetWallet = receiverId || wallet;
@@ -15,16 +15,18 @@ export async function POST(req: Request) {
             channelId, 
             receiverId, 
             wallet,
+            hasApiKey: !!apiKey,
             targetWallet 
         });
         
-        if (!channelId || !targetWallet) {
+        if (!channelId || !targetWallet || !apiKey) {
             console.error('Missing fields:', { 
                 channelId, 
-                receiverId: targetWallet 
+                receiverId: targetWallet,
+                hasApiKey: !!apiKey 
             });
             return NextResponse.json({ 
-                error: "Missing required fields. Need channelId and either receiverId or wallet" 
+                error: "Missing required fields. Need channelId, apiKey and either receiverId or wallet" 
             }, { status: 400 });
         }
 
@@ -65,13 +67,13 @@ export async function POST(req: Request) {
             body: requestBody,
             originalInput: { receiverId, wallet },
             formattedReceiverId,
-            hasApiKey: !!channelApiKey
+            hasApiKey: !!apiKey
         });
 
         const response = await fetch(`${baseUrl}/api/receipts/mint/${channelId}`, {
             method: 'POST',
             headers: {
-                'x-api-key': channelApiKey,
+                'x-api-key': apiKey,
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(requestBody)
