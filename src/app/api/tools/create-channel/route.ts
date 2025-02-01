@@ -1,5 +1,14 @@
 import { NextResponse } from "next/server";
 
+// Create a global store for channel data
+declare global {
+    var channelStore: { [key: string]: { apiKey: string } };
+}
+
+if (!global.channelStore) {
+    global.channelStore = {};
+}
+
 export async function POST(req: Request) {
     try {
         // Try to get parameters from both URL and body
@@ -131,26 +140,16 @@ export async function POST(req: Request) {
 
         const data = await response.json();
         
-        // Load existing channel data
-        const existingChannelData = process.env.SHARDDOG_CHANNEL_DATA ? 
-            JSON.parse(process.env.SHARDDOG_CHANNEL_DATA) : {};
-            
-        // Add new channel data while preserving existing channels
-        const updatedChannelData = {
-            ...existingChannelData,
-            [data.channelId]: {
-                apiKey: data.apiKey
-            }
+        // Store channel data in global store
+        global.channelStore[data.channelId] = {
+            apiKey: data.apiKey
         };
         
-        console.log('Updating channel data:', {
-            existingChannels: Object.keys(existingChannelData),
+        console.log('Updated channel store:', {
+            channels: Object.keys(global.channelStore),
             newChannel: data.channelId,
-            totalChannels: Object.keys(updatedChannelData).length
+            totalChannels: Object.keys(global.channelStore).length
         });
-        
-        // Store updated channel data
-        process.env.SHARDDOG_CHANNEL_DATA = JSON.stringify(updatedChannelData);
 
         return NextResponse.json(data);
     } catch (error) {

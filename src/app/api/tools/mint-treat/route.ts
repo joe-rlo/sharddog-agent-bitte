@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
 
+declare global {
+    var channelStore: { [key: string]: { apiKey: string } };
+}
+
 export async function POST(req: Request) {
     try {
         const { channelId, receiverId, wallet } = await req.json();
@@ -24,28 +28,14 @@ export async function POST(req: Request) {
             }, { status: 400 });
         }
 
-        // Get channel data from storage
-        const channelData = process.env.SHARDDOG_CHANNEL_DATA ? 
-            JSON.parse(process.env.SHARDDOG_CHANNEL_DATA) : null;
+        // Get channel data from global store
+        const channelApiKey = global.channelStore?.[channelId]?.apiKey;
 
-        console.log('Channel data loaded:', {
-            hasChannelData: !!channelData,
-            availableChannels: channelData ? Object.keys(channelData) : [],
-            requestedChannel: channelId
-        });
-
-        if (!channelData) {
-            console.error('No channel data found in environment');
-            return NextResponse.json({ error: "Channel configuration not found" }, { status: 400 });
-        }
-
-        // Find the specific channel's API key
-        const channelApiKey = channelData[channelId]?.apiKey;
-
-        console.log('API key check:', {
-            channelFound: !!channelData[channelId],
+        console.log('Channel data check:', {
+            channelFound: !!global.channelStore?.[channelId],
             hasApiKey: !!channelApiKey,
-            channelId
+            availableChannels: Object.keys(global.channelStore || {}),
+            requestedChannel: channelId
         });
 
         if (!channelApiKey) {
