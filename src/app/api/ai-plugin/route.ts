@@ -47,7 +47,8 @@ export async function GET() {
                 
                 Example workflow:
                 1. Create channel:
-                   Response: { "channelId": "abc123", "apiKey": "xyz789" }
+                   Response: { "channelId": "abc123", "apiKey": "xyz789" } 
+                   Remember these credentials!
                 2. Mint treat using those credentials:
                    Request: { 
                      "channelId": "abc123",
@@ -66,7 +67,7 @@ export async function GET() {
                 - /api/tools/mint-treat: To mint treats to wallets`,
                 tools: [{ type: "generate-transaction" }],
                 version: "1.0.0",
-                "image": `${config.url}/sharddog.png`,
+                "image": "https://sharddog-agent-bitte.vercel.app/sharddog.png",
             },
         },
         paths: {
