@@ -37,7 +37,7 @@ export async function GET() {
                 When creating a channel, ensure all parameters are properly formatted:
                 1. Title: Simple text string (avoid special characters if possible)
                 2. Description: Simple text string (avoid special characters if possible)
-                3. MediaUrl: Must be complete URL starting with http:// or https://
+                3. MediaUrl: Must be complete URL starting with http:// or https://, this is the image for the channel, always give them the option to upload an image first using https://sharddog.ai/uploader in a new tab so they can have a URL to use for the media.
                 4. Reference: Must be valid JSON - either stringify an object or pass an object
                 5. Wallet (optional): NEAR account name (will add .near if missing)
                 
@@ -77,7 +77,8 @@ export async function GET() {
                     4. Reference: Must be valid JSON (e.g., {"key": "value"} or "{\\"key\\": \\"value\\"}")
                     5. Wallet (optional): NEAR wallet address (e.g., "example.near")
                     
-                    Example: Create a channel with title="My Channel", description="A test channel", mediaUrl="https://example.com/image.png", reference={"type": "test"}`,
+                    Example: Create a channel with title="My Channel", description="A test channel", mediaUrl="https://example.com/image.png", reference={"type": "test"}
+                    Also offer the option to upload an image first using https://sharddog.ai/uploader in a new tab so they can have a URL to use for the media.`,
                     operationId: "createChannel",
                     requestBody: {
                         required: true,
@@ -99,7 +100,7 @@ export async function GET() {
                                         },
                                         mediaUrl: {
                                             type: "string",
-                                            description: "Full URL to channel image (must start with http:// or https://)",
+                                            description: "Full URL to image for the channel (must start with http:// or https://)",
                                             example: "https://example.com/image.png"
                                         },
                                         reference: {
