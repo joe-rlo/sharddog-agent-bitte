@@ -184,7 +184,7 @@ export async function GET() {
             "/api/tools/mint-treat": {
                 post: {
                     summary: "Mint a ShardDog treat",
-                    description: "Mints a treat to the specified wallet",
+                    description: "Mints a treat to the specified wallet. You MUST provide both the channelId AND apiKey from channel creation. So any time you mint a treat you must provide both of these from the channel creation response.",
                     operationId: "mintTreat",
                     requestBody: {
                         required: true,
