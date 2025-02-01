@@ -30,32 +30,10 @@ export async function POST(req: Request) {
             }, { status: 400 });
         }
 
-        // Get channel data from global store
-        const channelApiKey = global.channelStore?.[channelId]?.apiKey;
-
-        console.log('Channel data check:', {
-            channelFound: !!global.channelStore?.[channelId],
-            hasApiKey: !!channelApiKey,
-            availableChannels: Object.keys(global.channelStore || {}),
-            requestedChannel: channelId
-        });
-
-        if (!channelApiKey) {
-            console.error(`No API key found for channel: ${channelId}`);
-            return NextResponse.json({ error: "Invalid channel ID" }, { status: 400 });
-        }
-
         // Format wallet address if it doesn't have a valid suffix
         const formattedReceiverId = targetWallet.endsWith('.near') || targetWallet.endsWith('.testnet') 
             ? targetWallet 
             : `${targetWallet}.near`;
-
-        console.log('Wallet formatting:', {
-            original: targetWallet,
-            formatted: formattedReceiverId,
-            hasNearSuffix: targetWallet.endsWith('.near'),
-            hasTestnetSuffix: targetWallet.endsWith('.testnet')
-        });
 
         const baseUrl = process.env.NODE_ENV === 'development' 
             ? 'http://localhost:3001' 

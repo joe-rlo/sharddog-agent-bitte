@@ -24,7 +24,7 @@ export async function GET() {
         "x-mb": {
             "account-id": key.accountId,
             assistant: {
-                name: "ShardDog Assistant (testnet)",
+                name: "ShardDog Treat Maker (testnet)",
                 description: "An assistant that helps manage ShardDog treats, create channels, and mint treats to wallets",
                 instructions: `You are a helpful assistant that manages ShardDog treats.
                 You can help users create treat channels and mint treats to wallets.
